@@ -1,48 +1,17 @@
 require('express')
 
-const ExperienceNoDev = require('./../../models/ExperienceNoDev.js')
+const ExperienceNoDevController = require('./../../controllers/api/ExperienceNoDevController.js')
 
 /**
- * @param {Express} app
+ * @param {e.Router} router
  */
-const init = (app) => {
-    app.get("/api/experience/nodevexp", (req, res, next) => {
-        ExperienceNoDev.find().then((experience) => {
-            res.status(200).json(experience)
-        })
-    })
-
-    app.post("/api/experience/nodevexp", (req, res, next) => {
-        const experience = new ExperienceNoDev({ ...req.body })
-
-        experience.save().then(() => {
-            res.status(201).json({ message: "Experience successfully inserted." })
-        }).catch(() => {
-            res.status(400).json({ message: "Failed to insert experience." })
-        })
-    })
-
-    app.put("/api/experience/nodevexp/:id", (req, res, next) => {
-        ExperienceNoDev.findByIdAndUpdate(req.params.id, { ...req.body }, (err, experience) => {
-            if(!err && experience) {
-                res.status(200).json({ message: "Experience successfully updated." })
-            } else {
-                res.status(400).json({ message: "Failed to update experience." })
-            }
-        })
-    })
-
-    app.delete("/api/experience/nodevexp/:id", (req, res, next) => {
-        ExperienceNoDev.findByIdAndDelete(req.params.id, { ...req.body }, (err, experience) => {
-            if(!err && experience) {
-                res.status(200).json({ message: "Experience successfully deleted." })
-            } else {
-                res.status(400).json({ message: "Failed to delete experience." })
-            }
-        })
-    })
+const init = (router) => {
+    router.get("/", ExperienceNoDevController.get)
+    router.post("/", ExperienceNoDevController.post)
+    router.put("/:id", ExperienceNoDevController.put)
+    router.delete("/:id", ExperienceNoDevController.delete)
 }
 
-module.exports = { init }
+module.exports = { init, path: "/api/experience/nodevexp" }
 
 

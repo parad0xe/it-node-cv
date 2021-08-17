@@ -1,28 +1,15 @@
 require('express')
 
-const Header = require('./../../models/Header.js')
+const HeaderController = require('./../../controllers/api/HeaderController.js')
 
 /**
- * @param {Express} app
+ * @param {e.Router} router
  */
-const init = (app) => {
-    app.get("/api/header", (req, res, next) => {
-        Header.find().then((headers) => {
-            res.status(200).json(headers)
-        })
-    })
-
-    app.put("/api/header/:id", (req, res, next) => {
-        Header.findByIdAndUpdate(req.params.id, { ...req.body }, (err, header) => {
-            if(!err && header) {
-                res.status(200).json({ message: "Header successfully updated." })
-            } else {
-                res.status(400).json({ message: "Failed to update header." })
-            }
-        })
-    })
+const init = (router) => {
+    router.get("/", HeaderController.get)
+    router.put("/:id", HeaderController.put)
 }
 
-module.exports = { init }
+module.exports = { init, path: "/api/header" }
 
 
