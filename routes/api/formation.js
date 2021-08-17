@@ -16,18 +16,28 @@ const init = (app) => {
         const formation = new Formation({ ...req.body })
 
         formation.save().then(() => {
-            res.status(201).json({ message: "New formation successfully inserted." })
+            res.status(201).json({ message: "Formation successfully inserted." })
         }).catch(() => {
-            res.status(400).json({ message: "Formation insertion failed." })
+            res.status(400).json({ message: "Failed to insert formation." })
         })
     })
 
     app.put("/api/formation/:id", (req, res, next) => {
         Formation.findByIdAndUpdate(req.params.id, { ...req.body }, (err, formation) => {
-            if(err || !formation) {
-                res.status(400).json({ message: "Formation update failed." })
+            if(!err && formation) {
+                res.status(200).json({ message: "Formation successfully updated." })
             } else {
-                res.status(200).json({ message: "New formation successfully updated." })
+                res.status(400).json({ message: "Failed to update formation." })
+            }
+        })
+    })
+
+    app.delete("/api/formation/:id", (req, res, next) => {
+        Formation.findByIdAndDelete(req.params.id, { ...req.body }, (err, formation) => {
+            if(!err && formation) {
+                res.status(200).json({ message: "Formation successfully deleted." })
+            } else {
+                res.status(400).json({ message: "Failed to delete formation." })
             }
         })
     })
